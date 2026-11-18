@@ -8,3 +8,5 @@ __pycache__/
 .ipynb_checkpoints/
 .vscode/
 .vscode/
+.pytest_cache/
+*.egg-info/

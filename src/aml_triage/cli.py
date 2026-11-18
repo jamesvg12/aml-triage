@@ -84,7 +84,7 @@ def run(config_path: str, skip_forward: bool = False) -> dict:
 
     timings["total_s"] = time.time() - t_start
     metrics = {
-        "git_commit": _git("rev-parse", "HEAD"), "git_dirty": bool(_git("status", "--porcelain")),
+        "git_commit": _git("rev-parse", "HEAD"), "git_dirty": bool(_git("status", "--porcelain", "--untracked-files=no")),
         "config": {k: str(v) for k, v in vars(cfg).items()},
         "accounts": len(acct), "n_profile": len(PROFILE), "n_struct": len(STRUCT),
         "laundering_accounts": len(laundering), "base_rate": len(laundering) / n_acc,
