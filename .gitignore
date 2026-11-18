@@ -1,0 +1,10 @@
+.venv/
+data/
+models/
+reports/*.csv
+.env
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.vscode/
+.vscode/
