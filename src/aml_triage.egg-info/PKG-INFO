@@ -1,0 +1,19 @@
+Metadata-Version: 2.4
+Name: aml-triage
+Version: 0.1.0
+Summary: Graph-based AML account triage (ARI3217 Task 01): the given model, packaged.
+Requires-Python: >=3.11
+Requires-Dist: pandas
+Requires-Dist: pyarrow
+Requires-Dist: networkx
+Requires-Dist: scipy
+Requires-Dist: scikit-learn
+Requires-Dist: lightgbm
+Requires-Dist: kagglehub
+Requires-Dist: pyyaml
+Requires-Dist: python-dotenv
+Requires-Dist: joblib
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: jupyter; extra == "dev"
+Requires-Dist: matplotlib; extra == "dev"

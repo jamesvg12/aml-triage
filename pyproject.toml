@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aml-triage"
+version = "0.1.0"
+description = "Graph-based AML account triage (ARI3217 Task 01): the given model, packaged."
+requires-python = ">=3.11"
+dependencies = [
+  "pandas", "pyarrow", "networkx", "scipy", "scikit-learn", "lightgbm",
+  "kagglehub", "pyyaml", "python-dotenv", "joblib",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "jupyter", "matplotlib"]
+
+[project.scripts]
+aml-train = "aml_triage.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
