@@ -1,0 +1,60 @@
+{
+  "card_1_tail": {
+    "last_day_over_10k_tx": "2022-09-10",
+    "tail_rows": 1108,
+    "tail_laundering": 655,
+    "tail_laundering_share": 0.591,
+    "window_laundering_share": 0.00089
+  },
+  "card_2_day1_burst": {
+    "day1_rows": 1114921,
+    "day1_reinvestment_share": 0.431,
+    "median_rows_days_2_10": 482650
+  },
+  "card_3_self_transfers": {
+    "rows": 590819,
+    "share": 0.1164,
+    "laundering_among_them": 8,
+    "top_formats": {
+      "Reinvestment": 481056,
+      "ACH": 70954,
+      "Bitcoin": 26317
+    }
+  },
+  "card_4_currencies": {
+    "pay_currencies": 15,
+    "recv_currencies": 15,
+    "unmapped_in_FX": [],
+    "cross_currency_rows": 71779
+  },
+  "card_5_patterns_span": {
+    "attempts": 234,
+    "median_hours_by_pattern": {
+      "CYCLE": 71.9,
+      "FAN-IN": 84.9,
+      "FAN-OUT": 76.7,
+      "GATHER-SCATTER": 150.8,
+      "RANDOM": 46.0
+    },
+    "share_over_24h": 0.803,
+    "straddle_forward_split": 61
+  },
+  "card_6_typed_share": {
+    "laundering_tx_all_days": 5177,
+    "matched_to_typed_attempt": 1854
+  },
+  "new_a_account_id_at_several_banks": {
+    "accounts": 8,
+    "max_banks": 2
+  },
+  "new_b_exact_duplicate_rows": 9,
+  "new_c_same_currency_amount_mismatch": 0,
+  "new_d_amount_under_1": {
+    "rows": 147791,
+    "laundering": 52
+  },
+  "new_e_formats_with_zero_laundering": {
+    "Reinvestment": 481056,
+    "Wire": 171855
+  }
+}
