@@ -98,6 +98,7 @@ def run(config_path: str, skip_forward: bool = False) -> dict:
     (reports / "metrics.json").write_text(json.dumps(metrics, indent=2, default=lambda o: o.item() if hasattr(o, "item") else str(o)))
     joblib.dump({"model": m_all, "features": PROFILE + STRUCT, "git_commit": metrics["git_commit"]}, models / "model.joblib")
     queue.to_csv(reports / "queue_top200.csv")
+    pd.DataFrame({"score": p_all}, index=acct.index[idx_te]).to_csv(reports / "holdout_scores.csv")
     log.info("done in %.0fs: AUPRC %.3f, top-%d %d/%d, sha256 %s", timings["total_s"], metrics["headline"]["AUPRC"],
              cfg.analyst_capacity, queue.y.sum(), len(queue), fingerprint[:16])
     return metrics

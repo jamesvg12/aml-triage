@@ -1,2 +1,3 @@
 [console_scripts]
+aml-score = aml_triage.score:main
 aml-train = aml_triage.cli:main

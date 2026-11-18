@@ -17,6 +17,7 @@ dev = ["pytest", "jupyter", "matplotlib"]
 
 [project.scripts]
 aml-train = "aml_triage.cli:main"
+aml-score = "aml_triage.score:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
