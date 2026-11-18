@@ -28,3 +28,14 @@
 
 ## Notes
 - Notebook first ran from repo root: parquet cache landed in ~/data (DATA_DIR = cwd.parent.parent). Fixed by setting DATASETS_TASKS_DATA in .env.
+
+## Packaged pipeline (aml-train), clean run
+- Commit 30d4c31, git_dirty False
+- AUPRC 0.292 (0.265 / 0.100 / 0.292 by feature family), top-200 198/200, no-motif 92%
+- Forward AUPRC 0.247, lift 27.5x; new-account lift 8.6x
+- Holdout 154,521 / 1,759, SHA-256 d4d1fbf90a2856e4... (identical to notebook)
+- Timings: load 3 s, graph 14 s, features 106 s, train 10 s, forward 67 s, total 217 s
+- graph_s varied 120 / 49 / 14 s across runs: timings must be medians
+- Tests: 16 passed, 1 xfailed (4-node cycle not detected by the given signals)
+- prepare() on an empty window crashes with a TypeError (pandas 3): candidate input check
+- Notebook paths depended on the launch directory twice (~/data, ../config): fixed by resolving from the repo root
