@@ -14,5 +14,7 @@ def test_profile_counts_amounts_and_shares():
 
 
 def test_account_label_marks_both_ends_of_a_laundering_transfer():
-    t = account_table(make_tx([("A", "B"), ("B", "C")], laundering={("A", "B")}))
-    assert t.y.to_dict() == {"A": 1, "B": 1, "C": 0}
+    normal = [(f"N{i}", f"M{i}") for i in range(100)]          # background traffic keeps the day below the tail limit
+    t = account_table(make_tx([("A", "B"), ("B", "C")] + normal, laundering={("A", "B")}))
+    assert t.loc[["A", "B", "C"], "y"].to_dict() == {"A": 1, "B": 1, "C": 0}
+    assert t.y.sum() == 2

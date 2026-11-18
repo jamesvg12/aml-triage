@@ -17,6 +17,9 @@ FX = {"US Dollar": 1.0, "Euro": 1.0, "UK Pound": 1.15, "Swiss Franc": 1.03, "Can
       "Australian Dollar": 0.68, "Yen": 0.0070, "Yuan": 0.145, "Rupee": 0.0125, "Shekel": 0.29,
       "Saudi Riyal": 0.27, "Mexican Peso": 0.050, "Brazil Real": 0.19, "Ruble": 0.0165, "Bitcoin": 20000.0}
 
+# Days 1-10 peak at 0.21 % laundering; the tail runs at about 59 %. Anything above 5 % is the simulator's
+# laundering-only regime (dataset card, quirk 1), not real traffic.
+MAX_DAILY_LAUNDERING_SHARE = 0.05
 
 def get_raw(filename: str, cfg: Config) -> Path:
     """Return a local path to a raw file, downloading from Kaggle on first use.
@@ -49,8 +52,16 @@ def load_transactions(cfg: Config) -> pd.DataFrame:
 
 
 def prepare(tx: pd.DataFrame, cfg: Config) -> pd.DataFrame:
-    """Notebook cells 5-6: keep the window, convert to USD, add day and self-transfer flag."""
+    """Notebook cells 5-6: keep the window, convert to USD, add day and self-transfer flag.
+    Input checks: the window is not empty and contains no day from the laundering-only tail."""
     tx = tx[(tx.ts >= cfg.window_start) & (tx.ts < cfg.window_end)].reset_index(drop=True)
+    if tx.empty:
+        raise ValueError(f"no transactions in window {cfg.window_start.date()} to {cfg.window_end.date()}")
+    daily = tx.groupby(tx.ts.dt.floor("D")).is_laundering.mean()
+    tail = daily[daily > MAX_DAILY_LAUNDERING_SHARE]
+    if not tail.empty:
+        raise ValueError(f"window reaches the laundering-only tail: {tail.index[0].date()} is "
+                         f"{tail.iloc[0]:.0%} laundering (limit {MAX_DAILY_LAUNDERING_SHARE:.0%}); set window_end <= 2022-09-11")
     unmapped = set(tx.pay_cur.astype(str).unique()) - set(FX)
     if unmapped:
         raise ValueError(f"unmapped currency: {sorted(unmapped)}")
