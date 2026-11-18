@@ -1,0 +1,17 @@
+# Parameters from the notebook's Section 0, unchanged.
+seed: 3217
+kaggle_handle: ealtman2019/ibm-transactions-for-anti-money-laundering-aml
+files:
+  transactions: HI-Small_Trans.csv
+  patterns: HI-Small_Patterns.txt
+  accounts: HI-Small_accounts.csv
+
+window_start: "2022-09-01"
+window_end: "2022-09-11"      # exclusive; after 10 Sep the data is laundering-only (Trap 3)
+train_end: "2022-09-08"       # row-level control model (Section 6)
+forward_split: "2022-09-06"   # Trap 1: learn on days 1-5, score days 6-10
+analyst_capacity: 200         # accounts the team can investigate per cycle
+run_louvain: true             # community detection, about 80 s
+
+# Relative to the repo root. Overridden by DATASETS_TASKS_DATA in .env.
+data_dir: data
