@@ -61,3 +61,14 @@
 - Scoring all accounts puts 200/200 laundering in the top 200: training accounts are memorised; honest numbers are held-out 198/200 and forward
 - Container logs in UTC, host in CET: store UTC timestamps in the prediction log
 - Fresh clone: (to fill from 3a)
+
+## Step 4: monitoring (compose: postgres, pushgateway, prometheus, grafana)
+- Every prediction logged: predictions(run_id, scored_at UTC, model_version, window, acct, score, rank); 3 runs x 515,070 rows
+- model_version = training commit + model-file hash: 372e321f-729f45c5b275
+- Metrics pushed: aml_accounts_scored, aml_run_duration_seconds{stage}, aml_throughput_accounts_per_second,
+  aml_input_transfers_last_day (input feature), aml_input_usd_out_median, aml_queue_cutoff_score
+- Load: 3 full-window runs (5,077,237 tx each), caches dropped between runs, grafana+prometheus paused
+- Runs: 136 / 151 / 132 s -> MEDIAN 136 s, 3,786 accounts/s (~37k tx/s); prediction-log write 13-27 s
+- First attempt: prometheus_client missing from image (freeze writes prometheus_client, grep looked for prometheus-client);
+  predictions were logged but metrics not pushed, exit 2 -> partial failure invisible from either side alone
+- Memory: Windows at 92% with vmmem 5.9 GB before runs; had to close apps + drop caches to get clean timings
