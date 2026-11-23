@@ -39,3 +39,25 @@
 - Tests: 16 passed, 1 xfailed (4-node cycle not detected by the given signals)
 - prepare() on an empty window crashes with a TypeError (pandas 3): candidate input check
 - Notebook paths depended on the launch directory twice (~/data, ../config): fixed by resolving from the repo root
+
+## Step 2: data check (commit ba2449c, reports/data_check.json)
+- Tail: last day >10k tx = 10 Sep; days 11-18 = 1,108 tx, 655 laundering (59.1%) vs 0.089% in window
+- Day 1: 1,114,921 rows (2.3x median day 482,650), 43% Reinvestment
+- Self-transfers: 590,819 (11.6%), only 8 laundering
+- Currencies: 15/15 mapped, 71,779 cross-currency rows
+- Patterns: medians 71.9/84.9/76.7/150.8 h; 80% > 24 h; 61 of 234 attempts straddle the forward split (6 Sep)
+- Typed: 1,854 of 5,177
+- NOT ON CARD: Wire = 171,855 transfers, 0 laundering (also: 9 duplicate rows, 8 multi-bank account IDs, 147,791 amounts < 1)
+- Guard (commit 372e321): prepare() raises if any day > 5% laundering. With window_end 2022-09-19:
+  "ERROR window reaches the laundering-only tail: 2022-09-11 is 59% laundering (limit 5%)", exit 1
+- Guard trade-off: share threshold also trips on tiny fixtures (test needed 100 background rows); real feed would need a min-volume rule
+- Tests: 20 passed, 1 xfailed
+
+## Step 3: reproducible + container (commits a95ca81, 1cd6b7f)
+- aml-score local: 515,070 accounts / 5,077,237 tx in 107 s = 4,820 accounts/s
+- Image aml-triage:0.1.0 = 949 MB on disk (219 MB content); python:3.14-slim + libgomp1 + requirements-serve.txt
+- Container: 156 s = 3,291 accounts/s (about 45% slower than venv; to confirm with 3-run medians)
+- Parity train vs serve (container): 154,521 held-out, 0 missing, max |diff| 0.00e+00, top-200 identical
+- Scoring all accounts puts 200/200 laundering in the top 200: training accounts are memorised; honest numbers are held-out 198/200 and forward
+- Container logs in UTC, host in CET: store UTC timestamps in the prediction log
+- Fresh clone: (to fill from 3a)
