@@ -72,3 +72,13 @@
 - First attempt: prometheus_client missing from image (freeze writes prometheus_client, grep looked for prometheus-client);
   predictions were logged but metrics not pushed, exit 2 -> partial failure invisible from either side alone
 - Memory: Windows at 92% with vmmem 5.9 GB before runs; had to close apps + drop caches to get clean timings
+
+## Step 3a: fresh-copy reproduction (commit 886d653)
+- git clone -> new venv -> pip install -r requirements.txt -> pytest (20 passed, 1 xfailed) -> aml-train
+- Separate KAGGLEHUB_CACHE: data re-downloaded (454 MB in 13 s), parsed + cached in 18.7 s; data/processed 126 MB
+- Result identical: AUPRC 0.292, top-200 198/200, forward 0.247, new-account lift 8.6x, SHA-256 d4d1fbf90a2856e4; 198 s
+- Tolerance stated: exact match on AUPRC (4 dp), top-200 count and holdout SHA-256
+- FIRST ATTEMPT WAS INVALID: it "passed" without downloading anything. Cause: (1) VS Code terminal injected
+  DATASETS_TASKS_DATA from .env into the shell, so the fresh clone read the project's data; (2) .env had a missing
+  newline, gluing DATASETS_TASKS_DATA onto the token line, so copying "only the token" copied the path too.
+  Caught only by checking that .kagglehub existed. Fix: rewrote .env one key per line; reran from a clean shell.
