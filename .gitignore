@@ -11,3 +11,5 @@ __pycache__/
 .pytest_cache/
 *.egg-info/
 reports/*.parquet
+reports/metrics.json
+reports/score_run.json
