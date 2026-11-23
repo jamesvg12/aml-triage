@@ -6,6 +6,7 @@ src/aml_triage/config.py
 src/aml_triage/features.py
 src/aml_triage/graph.py
 src/aml_triage/load.py
+src/aml_triage/monitor.py
 src/aml_triage/score.py
 src/aml_triage/train.py
 src/aml_triage.egg-info/PKG-INFO
