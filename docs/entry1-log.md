@@ -82,3 +82,7 @@
   DATASETS_TASKS_DATA from .env into the shell, so the fresh clone read the project's data; (2) .env had a missing
   newline, gluing DATASETS_TASKS_DATA onto the token line, so copying "only the token" copied the path too.
   Caught only by checking that .kagglehub existed. Fix: rewrote .env one key per line; reran from a clean shell.
+
+## Attempt duration vs nightly batch
+- 46 of 234 typed attempts (20%) last <= 24 h: RANDOM 17/41, FAN-OUT 10/48, GATHER-SCATTER 8/51, FAN-IN 6/40, CYCLE 5/54
+- Batch still sees them next night (full window scored), but after the money has moved
